@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import Todo from './components/Todo';
 function App(props) {
+  console.log(props.tasks)
   return (
     <div className="todoapp stack-large">
       <h1>TodoMatic</h1>
