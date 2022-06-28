@@ -4,6 +4,15 @@ import Todo from './components/Todo';
 import Form from './components/Form';
 import FilterButton from './components/FilterButton';
 import { nanoid } from 'nanoid';
+
+function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}
+
 const FILTER_MAP = {
   All: () => true,
   Active: task => !task.completed,
@@ -11,9 +20,18 @@ const FILTER_MAP = {
 }
 const FILTER_NAMES = Object.keys(FILTER_MAP)
 
+
 function App(props) {
   const [filter, setFilter] = useState('All')
   const [tasks, setTasks] = useState(props.tasks)
+  const prevTaskLength = usePrevious(tasks.length)
+
+  useEffect(() => {
+    if (tasks.length - prevTaskLength === -1) {
+      listHeadingRef.current.focus();
+    }
+  }, [tasks.length, prevTaskLength])
+  
   function addTask(name) {
     const newTask = { id: "todo" + nanoid(), name: name, completed: false };
     setTasks([...tasks, newTask])
